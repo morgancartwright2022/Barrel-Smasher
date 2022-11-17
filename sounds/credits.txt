@@ -1,0 +1,8 @@
+All sounds received from freesound.org and have been edited.
+
+gulp: drinking and swallow by dersuperanton
+grunt: grunts by bennychico11
+swoosh: swoosh by berglindsi
+barrel_smash: light_crate_smash1 by Srehpog
+
+All other sounds are licensed under public domain.

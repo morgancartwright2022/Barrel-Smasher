@@ -1,0 +1,117 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<title>Barrel Smasher</title>
+		<meta charset="utf-8" />
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<script type="text/javascript" src="scripts/helper.js"></script>
+		<script type="text/javascript" src="scripts/scheduler.js"></script>
+		<script type="text/javascript" src="scripts/audio.js"></script>
+		<script type="text/javascript" src="scripts/inv_manager.js"></script>
+		<script type="text/javascript" src="scripts/main.js"></script>
+		<script type="text/javascript" src="scripts/map.js"></script>
+		<script type="text/javascript" src="scripts/level.js"></script>
+		<script type="text/javascript" src="scripts/controller.js"></script>
+		<script type="text/javascript" src="scripts/entity.js"></script>
+		<script type="text/javascript" src="scripts/character.js"></script>
+		<script type="text/javascript" src="scripts/text.js"></script>
+		<script type="text/javascript" src="scripts/particle.js"></script>
+		<script type="text/javascript" src="scripts/projectile.js"></script>
+		<script type="text/javascript" src="scripts/monster.js"></script>
+		<script type="text/javascript" src="scripts/environment.js"></script>
+		<script type="text/javascript" src="scripts/dialogue.js"></script>
+		<script type="text/javascript" src="scripts/npc.js"></script>
+		<script type="text/javascript" src="scripts/bag.js"></script>
+		<script type="text/javascript" src="scripts/buff.js"></script>
+		<script type="text/javascript" src="scripts/spell.js"></script>
+		<script type="text/javascript" src="scripts/player.js"></script>
+		<script type="text/javascript" src="scripts/item.js"></script>
+		<script type="text/javascript" src="scripts/structure.js"></script>
+		<script type="text/javascript" src="scripts/renderer.js"></script>
+		<script type="text/javascript" src="scripts/init.js"></script>
+	</head>
+    <body id="body">
+		<h1 id="gameover">Game Over</h1>
+		<div id="viewport">
+			<div id="gameboard">
+				<table id="map"></table>
+			</div>
+			<div class="hud" id="merchant-hud">
+				<div id="buy-panel">
+					<p class="merchant-text">Buy</p>
+					<div id="buy-items"></div>
+				</div>
+				<div id="sell-panel">
+					<p class="merchant-text">Sell</p>
+					<div id="sell-items"></div>
+				</div>
+			</div>
+			<div class="hud", id="dialogue-hud">
+				<p>Press 'f' to talk to somebody.</p>
+			</div>
+			<div class="hud" id="sound-hud">
+				<img id="music-control" src="imgs/icons/music.png"></img>
+				<img id="sound-control" src="imgs/icons/sound.png"></img>
+			</div>
+			<div class="hud" id="status-hud">
+				<p id="gold-hud" class="status-txt">Gold: 0</p>
+				<p id="hp-hud" class="status-txt">Health: 0</p>
+				<p id="mp-hud" class="status-txt">Magus: 0</p>
+			</div>
+			<div class="hud" id="survey-hud">
+				<p>Help me out by filling out this <a href="https://docs.google.com/forms/d/e/1FAIpQLSd9TkBlqWIcexcPn1Enlo8Eva1LhEl2wwxoDsMmU2jlFsipLg/viewform">Survey</a>.</p>
+			</div>
+			<div class="hud" id="loot-hud"></div>
+			<div class="hud" id="inv-hud">
+				<div id="equip-panel">
+					<img id="inv-class-disp"/>
+					<button id="mainHand-btn" class="loot-item inv-item"></button>
+					<button id="offHand-btn" class="loot-item inv-item"></button>
+					<button id="spells-btn" class="loot-item inv-item"></button>
+					<button id="body-btn" class="loot-item inv-item"></button>
+					<button id="head-btn" class="loot-item inv-item"></button>
+					<button id="neck-btn" class="loot-item inv-item"></button>
+					<button id="ring1-btn" class="loot-item inv-item"></button>
+					<button id="ring2-btn" class="loot-item inv-item"></button>
+				</div>
+				<br>
+				<div id="inv-panel"></div>
+				<br>
+				<div id="desc-panel">
+					<p id="inv-desc-txt"></p>
+				</div>
+			</div>
+			<div class="hud" id="class-select">
+				<p>Select Your Class:</p>
+				<figure class="class-fig" id="wizard-select">
+					<img src="imgs/classes/wizard_front.png" class="class-thumbnail" />
+					<br>
+					<figcaption class="class-desc" id="wizard-desc"></figcaption>
+				</figure>
+				<figure class="class-fig" id="templar-select">
+					<img src="imgs/classes/templar_front.png" class="class-thumbnail" />
+					<br>
+					<figcaption class="class-desc" id="templar-desc"></figcaption>
+				</figure>
+				<figure class="class-fig" id="hunter-select">
+					<img src="imgs/classes/hunter_front.png" class="class-thumbnail" />
+					<br>
+					<figcaption class="class-desc" id="hunter-desc"></figcaption>
+				</figure>
+				<figure class="class-fig" id="thief-select">
+					<img src="imgs/classes/thief_front.png" class="class-thumbnail" />
+					<br>
+					<figcaption class="class-desc" id="thief-desc"></figcaption>
+				</figure>
+				<p id="help">Controls: WASD to move, LEFT CLICK to attack, Q and E to use spells, SHIFT to block with shield, I to toggle inventory.</p>
+			</div>
+			<div class="hud" id="spell-slots">
+				<button class="loot-item"></button>
+				<button class="loot-item"></button>
+			</div>
+		</div>
+		<iframe id="silence" src="sounds/silence.mp3" allow="autoplay"></iframe>
+		<audio id="music" src="sounds/barrel_smasher_themesong.mp3" loop></audio>
+    </body>
+</html>
