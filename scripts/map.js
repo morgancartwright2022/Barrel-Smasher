@@ -166,14 +166,14 @@ class CastleMap extends Map {
 			"XX........XXXXXDXXX###oo##ooo#",
 			"XXX......XX    o      o  ###,#",
 			"XXXXXXXXXX     oooooooooo,,,,#",
-			"XX         ooooo         #,,,#",
-			"XX     ooooo             #####",
-			"XX     o   oo                #",
-			"%%%%%%%'%%  o                #",
-			"%''''''''%  oo               #",
-			"%''''''''%   o               #",
-			"%''''''''%   o               #",
-			"%%%%%%%%%%###o################",
+			"XX         ooooo   oo    #,,,#",
+			"XX     ooooo        ooo  #####",
+			"XX     o   oo         o      X",
+			"%%%%%%%'%%  o       XX,XXXXXXX",
+			"%''''''''%  oo      X,,,X.LR.X",
+			"%''''''''%   o      X,,,X....X",
+			"%''''''''%XXXoXXXXXXX,,,.....X",
+			"%%%%%%%%%%XXXoXXXXXXXXXXXXXXXX",
 		];
 		this.tiles = stringMap.map(str => {
 			const tileRow = [];

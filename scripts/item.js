@@ -37,7 +37,7 @@ class SkyDagger extends Item {
 }
 class Sword extends Item {
 	constructor() {
-		super("Short Sword", "A short, broad sword such as is commonly used by most warriors.", "sword.png", 10, 14, {minDmg: 45, maxDmg: 65, atkSpd: 45, range: 13}, "mainHand", "sword");
+		super("Short Sword", "A short, broad sword such as is commonly used by most warriors.", "sword.png", 15, 14, {minDmg: 45, maxDmg: 65, atkSpd: 45, range: 13}, "mainHand", "sword");
 	}
 }
 class SkySword extends Item {
@@ -47,7 +47,7 @@ class SkySword extends Item {
 }
 class Bow extends Item {
 	constructor() {
-		super("Short Bow", "A small bow for launching arrows. It's made of dark, limber wood.", "bow.png", 10, 5, {minDmg: 25, maxDmg: 35, atkSpd: 50, range: 60}, "mainHand", "bow");
+		super("Short Bow", "A small bow for launching arrows. It's made of dark, limber wood.", "bow.png", 15, 5, {minDmg: 25, maxDmg: 35, atkSpd: 50, range: 60}, "mainHand", "bow");
 	}
 }
 class DarkBow extends Item {
@@ -72,7 +72,7 @@ class Shield extends Item {
 }
 class BarkShield extends Item {
 	constructor() {
-		super("Bark Shield", "A rather large shield of rough bark. It's heavy, but fairly protective.", "ogre_shield.png", 35, 30, {def: 7, blk: 40, moveSpd: -2}, "offHand", "shield");
+		super("Bark Shield", "A rather large shield of rough bark. It's heavy, but fairly protective.", "ogre_shield.png", 20, 30, {def: 7, blk: 40, moveSpd: -2}, "offHand", "shield");
 	}
 }
 class WardenShield extends Item {
@@ -92,7 +92,7 @@ class HolyFocus extends Item {
 }
 class Cloak extends Item {
 	constructor() {
-		super("Shadow Cloak", "A magical cloak of black fabric, which grants its user speed and may provide invisibility from enemies.", "cloak.png", 30, 4, {mp: 30, spellpower: 4, castDelay: 20, moveSpd: 20}, "spells", "cloak");
+		super("Shadow Cloak", "A magical cloak of black fabric, which grants its user speed and may provide invisibility from enemies.", "cloak.png", 30, 4, {mp: 30, spellpower: 4, castDelay: 10, moveSpd: 20}, "spells", "cloak");
 	}
 }
 class Satchel extends Item {
@@ -112,7 +112,7 @@ class MagusRobe extends Item {
 }
 class LeatherArmor extends Item {
 	constructor() {
-		super("Leather Armor", "A tunic of hardened leather which provides light defense against attacks.", "leather_armor.png", 25, 20, {hp: 40, def: 3}, "body", "light armor");
+		super("Leather Armor", "A tunic of hardened leather which provides light defense against attacks.", "leather_armor.png", 30, 20, {hp: 40, def: 3}, "body", "light armor");
 	}
 }
 class StuddedLeatherArmor extends Item {
@@ -122,12 +122,12 @@ class StuddedLeatherArmor extends Item {
 }
 class PlateArmor extends Item {
 	constructor() {
-		super("Plate Armor", "A heavy coat of metal plates which greatly protects the user from blows. It is quite heavy however, reducing the speed of the wearer.", "plate_armor.png", 30, 45, {hp: 50, def: 8, moveSpd: -8}, "body", "heavy armor");
+		super("Plate Armor", "A heavy coat of metal plates which greatly protects the user from blows. It is quite heavy however, reducing the speed of the wearer.", "plate_armor.png", 50, 45, {hp: 50, def: 8, moveSpd: -8}, "body", "heavy armor");
 	}
 }
 class SkyArmor extends Item {
 	constructor() {
-		super("Skyforge Armor", "A set of blue steel armor that feels fairly light for its considerable bulk.", "sky_armor.png", 30, 45, {hp: 60, def: 10, moveSpd: -5}, "body", "heavy armor");
+		super("Skyforge Armor", "A set of blue steel armor that feels fairly light for its considerable bulk.", "sky_armor.png", 150, 45, {hp: 60, def: 10, moveSpd: -5}, "body", "heavy armor");
 	}
 }
 class OldHat extends Item {
@@ -192,7 +192,7 @@ class MinorMpPotion extends Item {
 }
 class Beer extends Item {
 	constructor() {
-		super("Beer", "A mug of good foamy ale. It smells of barley and hops.", "beer.png", 5, 1, {minHpRes: 5, maxHpRes: 5}, "none", "consumable", {use: "gulp.wav"})
+		super("Beer", "A mug of good foamy ale. It smells of barley and hops.", "beer.png", 5, 1, {minHpRes: 10, maxHpRes: 30, minMpDrain: 5, maxMpDrain: 15}, "none", "consumable", {use: "gulp.wav"})
 	}
 	onUse() {
 		main.broadcastEvent("drink alcohol");

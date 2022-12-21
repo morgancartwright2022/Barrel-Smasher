@@ -317,11 +317,11 @@ class OgreBarrel extends Monster {
 class Spirit extends Monster {
 	constructor(x, y) { 
 		super("spirit", x, y, 64, 64, {front: {stand: "enemies/spirit.png", atk: "enemies/spirit_atk.png"}},
-			{hp: 100, def: 3, minDmg: 20, maxDmg: 35, moveSpd: 70, atkSpd: 130, range: 0},
+			{hp: 100, def: 3, minDmg: 20, maxDmg: 40, moveSpd: 100, atkSpd: 130, range: 0},
 			{minGp: 3, maxGp: 5},
 			[{name: OldHat, chance: 0.1}, {name: LeatherHelmet, chance: 0.1}, {name: MetalHelmet, chance: 0.1}],
 			{hurt: "ghost_hurt.wav", death: "ghost_death.wav"},
-			{tick: 75},
+			{phase: 1, tick: 20},
 			true
 		);
 	}
@@ -330,8 +330,8 @@ class Spirit extends Monster {
 			this.wander(150, this.stats.moveSpd, 50, 1);
 		}
 		else if(this.phase == 1) {
-			this.multiAtk(80);
-			this.charge(250, this.stats.moveSpd, 100, 0);
+			this.multiAtk(60);
+			this.charge(200, this.stats.moveSpd, 75, 0);
 		}
 		this.tick++;
 	}
@@ -339,7 +339,7 @@ class Spirit extends Monster {
 class Ghost extends Monster {
 	constructor(x, y) {
 		super("ghost", x, y, 64, 64, {front: {stand: "enemies/ghost.png", atk: "enemies/ghost_atk.png"}},
-			{hp: 80, def: 0, minDmg: 15, maxDmg: 30, moveSpd: 130, atkSpd: 300, range: 0},
+			{hp: 80, def: 0, minDmg: 15, maxDmg: 25, moveSpd: 180, atkSpd: 300, range: 0},
 			{minGp: 3, maxGp: 6},
 			[{name: LesserSpdRing, chance: 0.15}, {name: OldOrb, chance: 0.05}],
 			{hurt: "ghost_hurt.wav", death: "ghost_death.wav"},
@@ -350,12 +350,12 @@ class Ghost extends Monster {
 	act() {
 		if(this.phase == 0) {
 			this.opacity = 1
-			this.wander(200, this.stats.moveSpd, 100, 1);
+			this.wander(150, this.stats.moveSpd, 75, 1);
 		}
 		else if(this.phase == 1) {
-			if(this.tick > 100)
+			if(this.tick > 50)
 				this.multiAtk(25);
-			this.hunt(200, this.stats.moveSpd, 2);
+			this.hunt(150, this.stats.moveSpd, 2);
 		}
 		else if(this.phase == 2) {
 			this.opacity = 0;
@@ -367,28 +367,28 @@ class Ghost extends Monster {
 class Slime extends Monster {
 	constructor(x, y) {
 		super("slime", x, y, 64, 64, {front: {stand: "enemies/orange_slime.png", walk1: "enemies/orange_slime.png", walk2: "enemies/orange_slime_move.png", atk: "enemies/orange_slime_atk.png"}},
-			{hp: 150, def: 0, minDmg: 20, maxDmg: 50, moveSpd: 65, atkSpd: 150, range: 0}, 
+			{hp: 150, def: 0, minDmg: 20, maxDmg: 50, moveSpd: 100, atkSpd: 150, range: 0}, 
 			{minGp: 2, maxGp: 4},
 			[{name: LesserWarriorAmulet, chance: 0.1}],
 			{hurt: "slime_hurt.wav", death: "slime_death.wav"},
-			{phase: 2, tick: 100}
+			{phase: 2, tick: 0}
 		);
 	}
 	act() {
 		if(this.phase == 0) {
-			if(this.nearestPlayerDist() < 20) {
+			if(this.nearestPlayerDist() < 25) {
 				this.phase = 1;
-				this.tick = 40;
+				this.tick = 25;
 			}
 			else
-				this.hunt(400, this.stats.moveSpd, 1);
+				this.hunt(200, this.stats.moveSpd, 1);
 		}
 		else if(this.phase == 1) {
-			this.multiAtk(40);
-			this.checkPhase(100, 2);
+			this.multiAtk(30);
+			this.checkPhase(80, 2);
 		}
 		else if(this.phase == 2) {
-			this.wander(150, this.stats.moveSpd, 50, 0);
+			this.wander(50, this.stats.moveSpd, 50, 0);
 		}
 		this.tick++;
 	}
@@ -396,11 +396,11 @@ class Slime extends Monster {
 class Skeleton extends Monster {
 	constructor(x, y) {
 		super("skeleton", x, y, 64, 64, helper.impStdDirImgs("enemies/skeleton"), 
-			{hp: 120, def: 5, minDmg: 20, maxDmg: 35, moveSpd: 42, atkSpd: 70, range: 12, mgcResist: 5},
+			{hp: 120, def: 5, minDmg: 20, maxDmg: 35, moveSpd: 60, atkSpd: 70, range: 12, mgcResist: 5},
 			{minGp: 3, maxGp: 4},
 			[{name: LesserMpRing, chance: 0.15}, {name: LesserHpRing, chance: 0.15}],
 			{hurt: "skeleton_hurt.wav", death: "skeleton_death.wav"},
-			{phase: 2, tick: 101},
+			{phase: 0, tick: 120},
 			false,
 			{x: 0, y: -10}
 		);
@@ -410,12 +410,12 @@ class Skeleton extends Monster {
 			this.amble(150, this.stats.moveSpd, 100, 0);
 		}
 		else if(this.phase == 0) {
-			this.strafe(300, this.stats.moveSpd, 50, 2);
-			this.targetedMultiAtk(100, true);
+			this.strafe(200, this.stats.moveSpd, 50, 2);
+			this.targetedMultiAtk(50, true);
 		}
 		else if(this.phase == 2) {
 			this.wander(150, this.stats.moveSpd, 100, 0);
-			this.targetedMultiAtk(100, true);
+			this.targetedMultiAtk(50, true);
 		}
 		this.tick++;
 	}
@@ -423,7 +423,7 @@ class Skeleton extends Monster {
 class Ogre extends Monster {
 	constructor(x, y) {
 		super("ogre", x, y, 96, 96, helper.impStdDirImgs("enemies/ogre"), 
-			{hp: 400, def: 4, minDmg: 20, maxDmg: 50, moveSpd: 30, atkSpd: 50, range: 22, blk: 40, mgcResist: 10},
+			{hp: 400, def: 4, minDmg: 20, maxDmg: 50, moveSpd: 45, atkSpd: 50, range: 22, blk: 40, mgcResist: 20},
 			{minGp: 15, maxGp: 30},
 			[{name: MagusRobe, chance: 0.2}, {name: StuddedLeatherArmor, chance: 0.2}, {name: SkyArmor, chance: 0.2}, {name: BarkShield, chance: 0.5}, {name: BarbarianNecklace, chance: 0.5}],
 			{hurt: "ogre_hurt.wav", death: "ogre_death.wav", block: "ogre_block.wav"},

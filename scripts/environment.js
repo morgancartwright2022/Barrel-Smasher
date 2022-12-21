@@ -84,6 +84,11 @@ class Altar extends Environment {
 		super("altar", x, y, 64, 64, "altar.png", false);
 	}
 }
+class Anvil extends Environment {
+	constructor(x, y) {
+		super("anvil", x, y, 48, 32, "anvil.png", false);
+	}
+}
 class ShadyMerchant extends Environment {
 	constructor(x, y) {
 		super("shady merchant", x, y, 64, 64, "merchant.png", false);
@@ -97,61 +102,23 @@ class ShadyMerchant extends Environment {
 			new DualRing()
 		];
 	}
-	updateBuy(player) {
-		const buyItems = document.getElementById("buy-items");
-		const itemList = buyItems.children;
-		const inv = this.inv;
-		for(let itemElem of itemList) {
-			if(!inv.some(item => item.id + "-box" == itemElem.id))
-				itemElem.parentNode.removeChild(itemElem);
-		}
-		inv.forEach(item => {
-			let found = false;
-			for(let itemElem of itemList) {
-				if(itemElem.id == item.id + "-box")
-					found = true;
-			}
-			if(!found) {
-				renderer.addMerchItem(buyItems, item.id, item.value, "imgs/items/" + item.img, () => {
-					if(player.status.gold >= item.value) {
-						player.spendGold(item.value);
-						player.invManager.addToInv(new item.constructor(), {silent: true});
-					}
-				});
-			}
-		});
+	startTrading(player) {
+		renderer.clearDeadBuyMerch(this.inv);
+		renderer.showBuyMerch(this.inv, player);
+		renderer.clearDeadSellMerch(player.inv);
+		renderer.showSellMerch(player.inv, player);
+		renderer.dispMerch();
 	}
-	updateSell(player) {
-		const sellItems = document.getElementById("sell-items");
-		const itemList = sellItems.children;
-		const inv = player.inv;
-		for(let itemElem of itemList) {
-			if(!inv.some(item => item.id + "-box" == itemElem.id))
-				itemElem.parentNode.removeChild(itemElem);
-		}
-		inv.forEach(item => {
-			let found = false;
-			for(let itemElem of itemList) {
-				if(itemElem.id == item.id + "-box")
-					found = true;
-			}
-			if(!found) {
-				renderer.addMerchItem(sellItems, item.id, Math.floor(item.value/2), "imgs/items/" + item.img, () => {
-					player.collectGold(Math.floor(item.value/2));
-					player.invManager.drop(item, "inv", {destroy: true});
-				});
-			}
-		});
+	endTrading() {
+		renderer.remMerch();
 	}
 	act() {
 		level.players.forEach(player => {
 			if(player.collision(this)) {
-				this.updateBuy(player);
-				this.updateSell(player);
-				renderer.dispMerch();
+				this.startTrading(player);
 			}
 			else {
-				renderer.remMerch();
+				this.endTrading();
 			}
 		});
 	}

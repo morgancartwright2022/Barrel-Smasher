@@ -7,10 +7,11 @@
  */
 class Npc extends Character {
     // Primary constructor
-    constructor(name, x, y, width, height, imgs, stats, topics) {
+    constructor(name, x, y, width, height, imgs, stats, topics, inv) {
 		super(name, x, y, width, height, imgs, stats);
         this.startPosition = {x, y};
         this.topics = topics;
+        this.inv = inv;
         this.acting = false;
         this.inDialogue = false;
         this.unfindable = false;
@@ -27,7 +28,9 @@ class Npc extends Character {
         this.onArrival = () => {};
         this.memory = {};
         this.quests = [];
-        this.eventResponses = [];
+        this.eventResponses = [
+            {name: "end trading", effect: () => this.goodbye()}
+        ];
         this.greetings = [];
         this.recentGossip = [];
 	}
@@ -45,6 +48,7 @@ class Npc extends Character {
         renderer.dispDialogue(topic, this);
         this.chatBubble();
     }
+    // Get angular direction to a (x, y) position
     getDirectionToPoint(x2, y2) {
 		const x1 = this.pos.x;
 		const y1 = this.pos.y;
@@ -97,6 +101,7 @@ class Npc extends Character {
         scheduler.addTimeout(() => {
             this.inDialogue = false;
         }, 30);
+        this.endTrading();
     }
     // Add/subtract an opinion
     modOpinion(character, value) {
@@ -360,6 +365,16 @@ class Npc extends Character {
         else
             selectedQuest.started = true;
     }
+    startTrading(player) {
+		renderer.clearDeadBuyMerch(this.inv);
+		renderer.showBuyMerch(this.inv, player);
+		renderer.clearDeadSellMerch(player.inv);
+		renderer.showSellMerch(player.inv, player);
+		renderer.dispMerch();
+	}
+	endTrading() {
+		renderer.remMerch();
+	}
     act() {
         if(this.path.length > 0 && !this.inDialogue)
             this.pathMove();
@@ -403,7 +418,15 @@ function getNpcList(callerName) {
 class Joseph extends Npc {
     constructor(x, y) {
         const imgs = {front: {stand: "npcs/farmer1_front_stand.png", walk1: "npcs/farmer1_front_move1.png", walk2: "npcs/farmer1_front_move2.png"}};
-        super("Joseph", x, y, 60, 60, imgs, {moveSpd: 50}, []);
+        super("Joseph", x, y, 60, 60, imgs, {moveSpd: 50}, [], [
+            new LeatherArmor(),
+            new LeatherHelmet(),
+            new WoodStaff(),
+            new Bow(),
+            new DarkStaff(),
+            new DarkBow(),
+            new Beer()
+        ]);
         this.finesPayed = false;
         this.hasHelmet = true;
     }
@@ -462,6 +485,7 @@ class Joseph extends Npc {
         ]);
         this.setOpinion("George", -20);
         this.setOpinion("Alexander", 5);
+        this.setOpinion("Odyss", 10);
         this.setOpinion("player", 0);
         this.onEvent("destroy beer barrel", () => {
             this.opinions.player -= 5;
@@ -469,10 +493,15 @@ class Joseph extends Npc {
         });
     }
 }
-class Priest extends Npc {
+class George extends Npc {
     constructor(x, y) {
         const imgs = {front: {stand: "npcs/priest_front_stand.png", walk1: "npcs/priest_front_move1.png", walk2: "npcs/priest_front_move2.png"}};
-        super("George", x, y, 60, 60, imgs, {moveSpd: 50}, []);
+        super("George", x, y, 60, 60, imgs, {moveSpd: 50}, [], [
+            new Robe(),
+            new OldHat(),
+            new MinorMpPotion(),
+            new MinorHpPotion()
+        ]);
     }
     init() {
         this.quests = [
@@ -648,7 +677,7 @@ class Watchman extends Npc {
         tg.addInfo("ques3", "Who do you serve?", "ans3", "His Majesty King Peter, lord of this realm.");
         tg.addInfo("ques4", "What do you think about fighting monsters?", "ans4", "The more of those foul beasts are killed the better.");
         tg.addInfo("quesDoor", "What is this door?", "door", null, null, speaker => !speaker.doorOpened);
-        tg.addTopicBranch("Can you tell me about this door?", "door");
+        tg.addStartReply(new Reply("Can you tell me about this door?", "door"));
         this.topics = tg.generate();
         this.topics.door = new Topic("This is the entry to the king's castle.", [
             new Reply("Can I enter?", "entrySucc", speaker => {
@@ -725,6 +754,31 @@ class Watchman extends Npc {
             if(this.opinions.player > 20)
                 this.addGreeting("Has yet another monster fallen by your hand? Great work, noble fighter!");
         });
+    }
+}
+class Odyss extends Npc {
+    constructor(x, y) {
+        const imgs = {front: {stand: "npcs/blacksmith_front_stand.png", walk1: "npcs/blacksmith_front_move1.png", walk2: "npcs/blacksmith_front_move2.png"}};
+        super("Odyss", x, y, 60, 60, imgs, {moveSpd: 50}, [], [
+            new Dagger(),
+            new Sword(),
+            new Shield(),
+            new PlateArmor(),
+            new MetalHelmet(),
+            new SkyArmor(),
+            new SkyDagger(),
+            new SkySword()
+        ]);
+    }
+    init() {
+        const tg = new TopicGenerator(getNpcList(this.name), this.quests);
+        tg.addSmallTalk("comp1", "You must be so strong!", 3);
+        tg.addSmallTalk("ins1", "Brute strength is not as important as intelligence, you know.", -5);
+        tg.addSmallTalk("comp2", "I admire the work you do.", 8);
+        tg.addInfo("ques1", "What is your name?", "ans1", "My name is Odyss.");
+        tg.addInfo("ques2", "What do you do?", "ans2", "I am the castle blacksmith. I make weapons, armor, and tools for people around here.");
+        this.topics = tg.generate();
+        this.setOpinion("Joseph", 10);
     }
 }
 class Sarah extends Npc {

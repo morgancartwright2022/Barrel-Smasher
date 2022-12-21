@@ -105,7 +105,7 @@ class Player extends Character {
 		this.status.gold -= amount;
 	}
 	spendMp(amount) {
-		this.status.mp -= amount;
+		this.status.mp -= Math.min(amount, this.status.mp);
 	}
 	renewMp(amount, display) {
 		if(display === undefined)
@@ -172,7 +172,7 @@ class Player extends Character {
 		});
 		audio.play(this.sounds.death);
 		this.exists = false;
-		main.gameover = true;
+		scheduler.addTimeout(() => main.gameover = true, 10);
 	}
 }
 

@@ -32,6 +32,10 @@ class InvManager {
 					this.player.heal(item.stats.minHpRes + Math.floor(Math.random() * (item.stats.maxHpRes - item.stats.minHpRes + 1)));
 				if(item.stats.minMpRes != undefined && item.stats.maxMpRes != undefined)
 					this.player.renewMp(item.stats.minMpRes + Math.floor(Math.random() * (item.stats.maxMpRes - item.stats.minMpRes + 1)));
+				if(item.stats.minHpDrain != undefined && item.stats.maxHpDrain != undefined)
+					this.player.harm(item.stats.minHpDrain + Math.floor(Math.random() * (item.stats.maxHpDrain - item.stats.minHpDrain + 1)), {ignoreDef: true});
+				if(item.stats.minMpDrain != undefined && item.stats.maxMpDrain != undefined)
+					this.player.spendMp(item.stats.minMpDrain + Math.floor(Math.random() * (item.stats.maxMpDrain - item.stats.minMpDrain + 1)));
 			}, time);
 		}
 		item.onUse();

@@ -91,6 +91,11 @@ class TopicGenerator {
             npcBye: "Well goodbye then.",
             pBye: "Goodbye."
         };
+        this.trading = {
+            pStart: "I would like to trade.",
+            npcStart: "Very well, take a look at my wares.",
+            pOutro: "That is all for now.",
+        }
         this.newTopic = {
             // New topic transitions
             pStart: "Let's talk about something else.",
@@ -191,12 +196,11 @@ class TopicGenerator {
     addInfo(id, str, respId, respStr, selectEffects, isActive) {
         this.info.list.push({id, str, respId, respStr, selectEffects, isActive});
     }
-    addTopicBranch(pStart, branchName) {
-        this.extraBranches.push({pStart, branchName});
+    addStartReply(reply) {
+        this.extraBranches.push(reply);
     }
+    // Main method for generating topics
     generate() {
-        // Main method for generating topics
-
         function personReplace(str, person) {
             // Helper function for replacing name and pronoun tokens with actual names or pronouns
             return str.replace("$NAME", person.name).replace("$PRONOUN", person.pronoun);
@@ -214,20 +218,24 @@ class TopicGenerator {
                     return this.general.greetings.neutral;
             }, [
                 new Reply(this.smallTalk.pStart, "smallTalkList", null, () => this.smallTalk.list.some(st => !st.used)),
+                new Reply(this.trading.pStart, "trade", speaker => speaker.startTrading(level.players[0]), speaker => speaker.inv && speaker.inv.length > 0),
                 new Reply(this.info.pStart, "infoList"),
                 new Reply(this.gossip.pStart, "gossipList", null, () => level.players[0].npcsMet.length > 1),
                 new Reply(this.questDialogue.pStart, "questList"),
                 new Reply(this.questDialogue.pUpdateIntro, "questUpdates", null, speaker => speaker.quests.some(qst => qst.started && !qst.completed)),
-            ].concat(this.extraBranches.map(props => new Reply(props.pStart, props.branchName))).concat(new Reply(this.newTopic.pCancel, "goodbye"))),
+            ].concat(this.extraBranches).concat(new Reply(this.newTopic.pCancel, "goodbye"))),
             newTopic: new Topic(this.newTopic.npcStart, [
                 new Reply(this.smallTalk.pStart, "smallTalkList", null, () => this.smallTalk.list.some(st => !st.used)),
                 new Reply(this.info.pStart, "infoList"),
                 new Reply(this.gossip.pStart, "gossipList", null, () => level.players[0].npcsMet.length > 1),
                 new Reply(this.questDialogue.pStart, "questList"),
                 new Reply(this.questDialogue.pUpdateIntro, "questUpdates", null, speaker => speaker.quests.some(qst => qst.started && !qst.completed))
-            ].concat(this.extraBranches.map(props => new Reply(props.pStart, props.branchName))).concat(new Reply(this.newTopic.pCancel, "goodbye"))),
+            ].concat(this.extraBranches).concat(new Reply(this.newTopic.pCancel, "goodbye"))),
             goodbye: new Topic(this.general.npcBye, [
                 new Reply(this.general.pBye)
+            ]),
+            trade: new Topic(this.trading.npcStart, [
+                new Reply(this.trading.pOutro, "goodbye", speaker => speaker.endTrading())
             ]),
             // Small talk:
             smallTalkList: new Topic(this.smallTalk.npcStart, this.smallTalk.list.map(st => {

@@ -197,7 +197,7 @@ body {
 }
 #buy-panel {
 	position: absolute;
-	top: 5px;
+	top: 35px;
 	left: 5px;
 	bottom: 5px;
 	width: 45%;
@@ -206,12 +206,23 @@ body {
 }
 #sell-panel {
 	position: absolute;
-	top: 5px;
+	top: 35px;
 	right: 5px;
 	bottom: 5px;
 	width: 45%;
 	height: auto;
 	overflow: auto;
+}
+#hide-merchant-button {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	width: 25px;
+	height: 25px;
+	background: linear-gradient(to bottom, rgb(50,50,50) 0%,rgb(10,10,10) 100%);
+	border: 2px rgb(20, 20, 20) solid;
+	color: rgb(220,220,220);
+	font-weight: bold;
 }
 .merchant-item-box {
 	position: static;
@@ -270,7 +281,7 @@ body {
 #inv-desc-txt {
 	font-family: Arial, sans-serif;
 }
-#inv-desc-txt > b {
+b {
 	color: rgb(255, 255, 255);
 }
 #gameover {

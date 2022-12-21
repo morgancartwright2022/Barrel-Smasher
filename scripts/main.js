@@ -76,8 +76,6 @@ const main = {
 			if(!main.gameover) {
 				controller.act();
 				level.allAct(delay);
-				if(level.players[0] === undefined)
-					console.log(level);
 				if(level.players.length > 0)
 					renderer.renderAll(level, level.players[0]);
 				level.checkForDead();

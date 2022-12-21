@@ -125,7 +125,6 @@ class Plains extends Level {
 		}
 
 		//other stuff
-		this.environment.push(new ShadyMerchant(1000, 900));
 		this.environment.push(new LevelChanger(1000, 40, "castle", {x: 865, y: 1850}));
 		return {x: 1000, y: 1000};
 	}
@@ -186,16 +185,15 @@ class Castle extends Level {
 		this.spawnAtTile(27, 14, Sarah, "npcs");
 		this.spawnAtTile(28, 21, Joseph, "npcs");
 		this.spawnAtTile(16, 20, Watchman, "npcs");
-		this.spawnAtTile(2, 27, Priest, "npcs");
+		this.spawnAtTile(2, 27, George, "npcs");
 		this.spawnAtTile(4, 13, Duchess, "npcs");
+		this.spawnAtTile(27, 27, Odyss, "npcs");
 		this.npcs.forEach(npc => npc.init());
 		this.spawnAtTile(24, 22, BeerBarrel, "dummies");
 		this.spawnAtTile(24, 23, BeerBarrel, "dummies");
 		this.environment.push(new LevelChanger(865, 1920, "plains", {x: 1000, y: 150}));
-		this.environment.push(new Shrub(1500, 1800));
-		this.environment.push(new Shrub(1400, 1820));
-		this.environment.push(new Shrub(730, 1790));
-		this.environment.push(new Shrub(700, 1835));
+		this.environment.push(new Shrub(730, 1780));
+		this.environment.push(new Shrub(700, 1750));
 		this.environment.push(new Shrub(910, 1550));
 		this.environment.push(new Shrub(850, 1350));
 		this.environment.push(new Shrub(750, 1375));
@@ -208,6 +206,9 @@ class Castle extends Level {
 		this.environment.push(new Bedroll(1800, 880));
 		this.environment.push(new Bedroll(1800, 750));
 		this.environment.push(new CampFire(388, 64));
+		this.environment.push(new CampFire(1730, 1728));
+		this.environment.push(new Anvil(1630, 1728));
+		this.environment.push(new Anvil(1825, 1728));
 		this.environment.push(new Table(550, 150));
 		this.spawnAtTile(1, 27, Altar, "environment");
 		return {x: 800, y: 1500};

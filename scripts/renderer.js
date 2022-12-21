@@ -24,6 +24,7 @@ const classInfo = {
 
 const renderer = {
 	numEffects: {},
+	// renderMap -> creates the map tiles
 	renderMap: function(map) {
 		let res = "";
 		for(let y = 0; y < map.height; y++) {
@@ -44,12 +45,14 @@ const renderer = {
 		setSize.call(this, "map");
 		setSize.call(this, "gameboard");
 	},
+	// clearEntities -> removes all entity sprites in the list
 	clearEntities: (entities) => {
 		entities.forEach(entity => {
 			let sprite = document.getElementById(entity.id);
 			sprite.parentElement.removeChild(sprite);
 		});
 	},
+	// clearAllEntities -> removes all entities from the level
 	clearAllEntities: (level) => {
 		renderer.clearEntities(level.players);
 		renderer.clearEntities(level.monsters);
@@ -60,6 +63,7 @@ const renderer = {
 		renderer.clearEntities(level.particles);
 		renderer.clearEntities(level.npcs);
 	},
+	// renderEntities -> shows the entity sprites in the list
 	renderEntities: function(entities) {
 		entities.forEach(entity => {
 			let sprite = document.getElementById(entity.id);
@@ -96,6 +100,7 @@ const renderer = {
 				sprite.style.transform = "rotate(" + (360-entity.rotation*180/Math.PI).toString() + "deg)";
 		});
 	},
+	// renderTexts -> shows all text displays on the list
 	renderTexts: function(texts) {
 		texts.forEach(text => {
 			let sprite = document.getElementById(text.id);
@@ -120,11 +125,13 @@ const renderer = {
 				sprite.style.height = text.size.height + "px";
 		});
 	},
+	// renderPlayerView -> centers the player
 	renderPlayerView: function(activePlayer) {
 		const viewport = document.getElementById("viewport");
 		viewport.scrollLeft = activePlayer.pos.x - 350;
 		viewport.scrollTop = activePlayer.pos.y - 332;
 	},
+	// renderPlayerStatus -> updates number indicators for players gold, health, and magus
 	renderPlayerStatus: function(activePlayer) {
 		const goldDisp = document.getElementById("gold-hud");
 		goldDisp.innerHTML = "Gold: " + activePlayer.status.gold;
@@ -133,6 +140,7 @@ const renderer = {
 		const mpDisp = document.getElementById("mp-hud");
 		mpDisp.innerHTML = "Magus: " + Math.max(activePlayer.status.mp, 0) + "/" + activePlayer.stats.mp;
 	},
+	// renderAll -> shows everything in the level
 	renderAll: function(levelData, activePlayer) {
 		renderer.renderEntities(levelData.players);
 		renderer.renderEntities(levelData.monsters);
@@ -153,7 +161,8 @@ const renderer = {
 		function removeEntities(entities) {
 			entities.forEach(entity => {
 				const sprite = document.getElementById(entity.id);
-				sprite.parentNode.removeChild(sprite);
+				if(sprite && sprite.parentNode)
+					sprite.parentNode.removeChild(sprite);
 			});
 		}
 		removeEntities(levelData.deadEntities);
@@ -167,10 +176,11 @@ const renderer = {
 		const dialogueBox = document.getElementById("dialogue-hud");
 		dialogueBox.innerHTML = "";
 		const msgElem = document.createElement("p");
+		const nameStr = "<b>" + speaker.name + ":</b><br><br>"; 
 		if(typeof topic.speakerMsg === "function")
-			msgElem.innerHTML = topic.speakerMsg(speaker).replace("\n", "<br>");
+			msgElem.innerHTML = nameStr + topic.speakerMsg(speaker).replace("\n", "<br>");
 		else if(typeof topic.speakerMsg === "string")
-			msgElem.innerHTML = topic.speakerMsg.replace("\n", "<br>");
+			msgElem.innerHTML = nameStr + topic.speakerMsg.replace("\n", "<br>");
 		else console.log("Unusual type for topic.speakerMsg.");
 		dialogueBox.appendChild(msgElem);
 		let activeReplies = topic.replies;
@@ -210,10 +220,10 @@ const renderer = {
 		renderer.changeImgElem(invClassDisp, "imgs/" + player.imgs.front.stand);
 	},
 	renderEq: function(player) {
-
+		// TODO: add something here
 	},
 	renderInv: function(player) {
-
+		// TODO: add something here
 	},
 	addToInvDisplay: function(item, invManager) {
 		renderer.removeMouseOver(item);
@@ -260,10 +270,12 @@ const renderer = {
 				const descMap = {"atkSpd": "Attack Speed", "moveSpd": "Move Speed", "castDelay": "Cast Delay", "blk": "Block Power", "dmg": "Damage", "def": "Defense"};
 				const minMap = {
 					"minDmg": {min: "minDmg", max: "maxDmg", disp: "Damage"},
-					"minHpRes": {min: "minHpRes", max: "maxHpRes", disp: "Hp Heal"}, 
-					"minMpRes": {min: "minMpRes", max: "maxMpRes", disp: "Mp Heal"}
+					"minHpRes": {min: "minHpRes", max: "maxHpRes", disp: "HP Heal"}, 
+					"minMpRes": {min: "minMpRes", max: "maxMpRes", disp: "MP Heal"},
+					"minHpDrain": {min: "minHpDrain", max: "maxHpDrain", disp: "HP Drain"},
+					"minMpDrain": {min: "minMpDrain", max: "maxMpDrain", disp: "MP Drain"},
 				};
-				const maxes = ["maxDmg", "maxHpRes", "maxMpRes"];
+				const maxes = ["maxDmg", "maxHpRes", "maxMpRes", "maxHpDrain", "maxMpDrain"];
 				if(stat in descMap)
 					statsTxt += "<b>" + descMap[stat] + "</b>: " + item.stats[stat] + "<br>";
 				else if(stat in minMap)
@@ -309,7 +321,10 @@ const renderer = {
 					renderer.createBtn(elem, "loot-item", "imgs/misc/loot_bag1.png", () => bag.takeAll(player));
 				}
 				else {
-					renderer.createBtn(elem, "loot-item", "imgs/items/" + item.img, () => bag.take(item, player));
+					renderer.createBtn(elem, "loot-item", "imgs/items/" + item.img, () => {
+						bag.take(item, player);
+						renderer.removeBtn(elem);
+					});
 				}
 			}
 			addItem("loot all");
@@ -352,6 +367,7 @@ const renderer = {
 		const disp = document.getElementById("class-select");
 		disp.style.display = "none";
 	},
+	//toggleInv -> toggles inventory display on and off
 	toggleInv: function() {
 		const invHud = document.getElementById("inv-hud");
 		if(invHud.style.display == "block")
@@ -368,7 +384,9 @@ const renderer = {
 	remMerch: function() {
 		const merchHud = document.getElementById("merchant-hud");
 		merchHud.style.display = "none";
+		renderer.clearAllMerch();
 	},
+	//addMerchItem -> shows an item for display in the buy/sell window
 	addMerchItem: function(parent, id, cost, imgSrc, func) {
 		const elem = document.createElement("div");
 		elem.className = "merchant-item-box";
@@ -379,6 +397,68 @@ const renderer = {
 		priceDisplay.className = "merchant-item-cost";
 		elem.appendChild(priceDisplay);
 		parent.appendChild(elem);
+	},
+	clearAllMerch: function() {
+		const buyItems = document.getElementById("buy-items");
+		buyItems.innerHTML = "";
+		const sellItems = document.getElementById("sell-items");
+		sellItems.innerHTML = "";
+	},
+	//renderMerch -> clears buy/sell items that are not avaiable
+	clearDeadMerch: function(listId, inv) {
+		const itemList = document.getElementById(listId).children;
+		for(let itemElem of itemList) {
+			if(!inv.some(item => item.id + "-box" == itemElem.id))
+				itemElem.parentNode.removeChild(itemElem);
+		}
+	},
+	//clearDeadBuyMerch -> clears buy items that are not avaiable
+	clearDeadBuyMerch: function(inv) {
+		this.clearDeadMerch("buy-items", inv);
+	},
+	//clearDeadSellMerch -> clears sell items that are not avaiable
+	clearDeadSellMerch: function(inv) {
+		this.clearDeadMerch("sell-items", inv);
+	},
+	//showBuyMerch -> shows items that are available to buy
+	showBuyMerch: function(inv, player) {
+		const buyItems = document.getElementById("buy-items");
+		const itemList = buyItems.children;
+		inv.forEach(item => {
+			let found = false;
+			for(let itemElem of itemList) {
+				if(itemElem.id == item.id + "-box")
+					found = true;
+			}
+			if(!found) {
+				renderer.addMerchItem(buyItems, item.id, item.value, "imgs/items/" + item.img, () => {
+					if(player.status.gold >= item.value) {
+						player.spendGold(item.value);
+						player.invManager.addToInv(new item.constructor(), {silent: true});
+						renderer.showSellMerch(player.inv, player)
+					}
+				});
+			}
+		});
+	},
+	//showSellMerch -> shows items that are available to sell
+	showSellMerch: function(inv, player) {
+		const sellItems = document.getElementById("sell-items"); 
+		const itemList = sellItems.children;
+		inv.forEach(item => {
+			let found = false;
+			for(let itemElem of itemList) {
+				if(itemElem.id == item.id + "-box")
+					found = true;
+			}
+			if(!found) {
+				renderer.addMerchItem(sellItems, item.id, Math.floor(item.value/2), "imgs/items/" + item.img, () => {
+					player.collectGold(Math.floor(item.value/2));
+					player.invManager.drop(item, "inv", {destroy: true});
+					renderer.clearDeadSellMerch(inv);
+				});
+			}
+		});
 	},
 	remGameover: function() {
 		const overDisp = document.getElementById("gameover");
