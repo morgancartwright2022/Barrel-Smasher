@@ -1,0 +1,22 @@
+{
+  "name": "barrel-smasher",
+  "version": "1.0.0",
+  "description": "A game about smashing barrels.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morgancartwright2022/Barrel-Smasher.git"
+  },
+  "author": "Morgan Cartwright",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/morgancartwright2022/Barrel-Smasher/issues"
+  },
+  "homepage": "https://github.com/morgancartwright2022/Barrel-Smasher#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
